@@ -1,0 +1,184 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.v2</groupId>
+	<artifactId>vaadin8s</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>Vaadin 8 Single service</name>
+
+	<modules>
+		<module>vaadin8s-utils</module>
+		<module>vaadin8s-model</module>
+		<module>vaadin8s-repository</module>
+		<module>vaadin8s-service</module>
+		<module>vaadin8s-ui</module>
+		<module>vaadin8s-web</module>
+	</modules>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.wildfly.swarm</groupId>
+					<artifactId>wildfly-swarm-plugin</artifactId>
+					<version>${version.wildfly-swarm}</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.5.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>2.19.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>2.6</version>
+					<configuration>
+						<failOnMissingWebXml>false</failOnMissingWebXml>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.wildfly.swarm</groupId>
+				<artifactId>wildfly-swarm-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>multistart</id>
+						<goals>
+							<goal>multistart</goal>
+						</goals>
+						<configuration>
+							<processes>
+								<process>
+									<artifactId>vaadin8s-ui</artifactId>
+									<properties>
+										<swarm.http.port>8080</swarm.http.port>
+									</properties>
+									<mainClass>com.example.auth.Main</mainClass>
+								</process>
+							</processes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>package</id>
+					</execution>
+					<execution>
+						<id>start</id>
+					</execution>
+					<execution>
+						<id>stop</id>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<properties>
+		<version.parent>0.0.1-SNAPSHOT</version.parent>
+		<version.javaee>7.0</version.javaee>
+		<version.resteasy>3.0.18.Final</version.resteasy>
+		<version.swagger>1.5.9</version.swagger>
+		<skipLicenseCheck>false</skipLicenseCheck>
+		<!--Swarm -->
+		<version.wildfly-swarm>2016.12.0</version.wildfly-swarm>
+		<!-- Test -->
+		<version.arquillian>1.0.0.Alpha3</version.arquillian>
+		<version.arquillian.wildfly.remote>8.2.1.Final</version.arquillian.wildfly.remote>
+		<version.arquillian.wildfly.managed>8.2.1.Final</version.arquillian.wildfly.managed>
+		<version.wildfly>10.1.0.Final</version.wildfly>
+		<version.junit>4.12</version.junit>
+		<version.jsonunit>1.12.1</version.jsonunit>
+		<version.jackson>2.3.1</version.jackson>
+		<version.tomee>7.0.1</version.tomee>
+		<version.el>2.2</version.el>
+		<version.jboss-logging>3.3.0.Final</version.jboss-logging>
+		<!-- Plugins -->
+		<version.clean.plugin>3.0.0</version.clean.plugin>
+		<version.compiler.plugin>3.5.1</version.compiler.plugin>
+		<version.dependency.plugin>2.10</version.dependency.plugin>
+		<version.failsafe.plugin>2.19.1</version.failsafe.plugin>
+		<version.install.plugin>2.5.2</version.install.plugin>
+		<version.jar.plugin>3.0.2</version.jar.plugin>
+		<version.license.plugin>1.9</version.license.plugin>
+		<version.formatter.plugin>0.5.2</version.formatter.plugin>
+		<version.surefire.plugin>2.19.1</version.surefire.plugin>
+		<version.war.plugin>2.6</version.war.plugin>
+		<version.processor.plugin>3.1.0</version.processor.plugin>
+		<!-- Compiler -->
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- hammock -->
+		<hammock.version>0.4.0</hammock.version>
+		<arquillian-weld-embedded.version>2.0.0.Beta3</arquillian-weld-embedded.version>
+		<maven-shade-plugin.version>2.4.3</maven-shade-plugin.version>
+		<!-- vaadin -->
+		<version.vaadin>8.3.2</version.vaadin>
+		<!-- JnoSQL -->
+		<version.jnosql>0.0.5</version.jnosql>
+		<!-- extra -->
+		<failOnMissingWebXml>false</failOnMissingWebXml>
+		<packaging.module>jar</packaging.module>
+		<packaging.web>war</packaging.web>
+	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<!-- WILDFLY SWARM -->
+			<dependency>
+				<groupId>org.wildfly.swarm</groupId>
+				<artifactId>bom-all</artifactId>
+				<version>${version.wildfly-swarm}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<profiles>
+		<profile>
+			<id>wildfly-swarm</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>${version.surefire.plugin}</version>
+						<configuration>
+							<skipTests>false</skipTests>
+							<systemPropertyVariables>
+								<arquillian.launch>arquillian-wildfly-swarm</arquillian.launch>
+							</systemPropertyVariables>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>org.wildfly.swarm</groupId>
+					<artifactId>microprofile</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>org.wildfly.swarm</groupId>
+					<artifactId>arquillian</artifactId>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+</project>
